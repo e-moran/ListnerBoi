@@ -1,19 +1,11 @@
 package ie.eointm.listnerboi;
 
-public class Show {
-    enum Day {
-        MONDAY,
-        TUESDAY,
-        WEDNESDAY,
-        THURSDAY,
-        FRIDAY,
-        SATURDAY,
-        SUNDAY
-    }
+import java.util.Calendar;
 
+public class Show {
     private String showName;
     private String emailAddress;
-    private Day day;
+    private int day;
     private int startHr;
     private int startMin;
     private int startSec;
@@ -37,7 +29,7 @@ public class Show {
         return emailAddress;
     }
 
-    public Day getDay() {
+    public int getDay() {
         return day;
     }
 
@@ -70,22 +62,22 @@ public class Show {
                 "}";
     }
 
-    public static Day convertDay(int day) {
+    public static int convertDay(int day) {
         switch(day) {
             case 1:
-                return Day.MONDAY;
+                return Calendar.MONDAY;
             case 2:
-                return Day.TUESDAY;
+                return Calendar.TUESDAY;
             case 3:
-                return Day.WEDNESDAY;
+                return Calendar.WEDNESDAY;
             case 4:
-                return Day.THURSDAY;
+                return Calendar.THURSDAY;
             case 5:
-                return Day.FRIDAY;
+                return Calendar.FRIDAY;
             case 6:
-                return Day.SATURDAY;
+                return Calendar.SATURDAY;
             case 7:
-                return Day.SUNDAY;
+                return Calendar.SUNDAY;
             default:
                 throw new IllegalArgumentException("Not a valid day");
         }
