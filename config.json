@@ -1,0 +1,24 @@
+{
+  "streamUrl": "http://sampleradio.com/",
+  "active": false,
+  "schedule": [
+    {
+      "showName": "Judgement",
+      "emailAddress": "test@test.com",
+      "day": 4,
+      "startTimeHrs": 12,
+      "startTimeMins": 0,
+      "startTimeSecs": 0,
+      "runtime": 3600
+    },
+    {
+      "showName": "A Slightly Worse Show Than Judgement",
+      "emailAddress": "test2@test.com",
+      "day": 3,
+      "startTimeHrs": 11,
+      "startTimeMins": 0,
+      "startTimeSecs": 0,
+      "runtime": 3600
+    }
+  ]
+}
