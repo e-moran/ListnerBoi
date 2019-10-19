@@ -11,6 +11,7 @@ import java.util.ArrayList;
 public class Config {
 
     private String streamURL;
+    private String outputDir;
     private boolean isActive;
     private ArrayList<Show> schedule;
 
@@ -33,6 +34,7 @@ public class Config {
             JSONObject config = new JSONObject(new String(Files.readAllBytes(Paths.get("config.json"))));
 
             this.streamURL = config.getString("streamUrl");
+            this.outputDir = config.getString("outputDir");
             this.isActive = config.getBoolean("active");
             JSONArray arr = config.getJSONArray("schedule");
 
@@ -62,8 +64,8 @@ public class Config {
     public String toString() {
         String scheduleInfo = "";
         for(int i=0; i<schedule.size(); i++)
-            scheduleInfo += schedule.get(i).toString();
+            scheduleInfo += "    " + schedule.get(i).toString() + '\n';
 
-        return "URL: " + getStreamURL() + "\nisActive: " + (isActive ? "true" : "false") + "\nSchedule:\n" + scheduleInfo;
+        return "URL: " + getStreamURL() + "\noutputDir: " + outputDir  + "\nisActive: " + (isActive ? "true" : "false") + "\nSchedule:\n" + scheduleInfo;
     }
 }

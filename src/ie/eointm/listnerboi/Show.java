@@ -67,7 +67,7 @@ public class Show {
                 ", startMin=" + startMin +
                 ", startSec=" + startSec +
                 ", runtime=" + runtime +
-                "}\n";
+                "}";
     }
 
     public static Day convertDay(int day) {

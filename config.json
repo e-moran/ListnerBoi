@@ -1,5 +1,6 @@
 {
   "streamUrl": "http://sampleradio.com/",
+  "outputDir": "output",
   "active": false,
   "schedule": [
     {
