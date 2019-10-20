@@ -2,6 +2,7 @@ package ie.eointm.listnerboi;
 
 import org.json.*;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -14,9 +15,18 @@ public class Config {
     private String outputDir;
     private boolean isActive;
     private ArrayList<Show> schedule;
+    private String ccEmail;
+    private String fromEmail;
+    private String emailPass;
+    private String smtpServer;
+    private int smtpPort;
 
     public String getStreamURL() {
         return streamURL;
+    }
+
+    public String getOutputDir() {
+        return outputDir;
     }
 
     public boolean isActive() {
@@ -27,6 +37,26 @@ public class Config {
         return schedule;
     }
 
+    public String getCcEmail() {
+        return ccEmail;
+    }
+
+    public String getFromEmail() {
+        return fromEmail;
+    }
+
+    public String getEmailPass() {
+        return emailPass;
+    }
+
+    public String getSmtpServer() {
+        return smtpServer;
+    }
+
+    public int getSmtpPort() {
+        return smtpPort;
+    }
+
     public Config() {
         schedule = new ArrayList<>();
 
@@ -34,8 +64,13 @@ public class Config {
             JSONObject config = new JSONObject(new String(Files.readAllBytes(Paths.get("config.json"))));
 
             this.streamURL = config.getString("streamUrl");
-            this.outputDir = config.getString("outputDir");
+            this.outputDir = new File(".").getCanonicalPath() + "/" + config.getString("outputDir");
             this.isActive = config.getBoolean("active");
+            this.ccEmail = config.getString("ccEmail");
+            this.fromEmail = config.getString("fromEmail");
+            this.emailPass = config.getString("emailPass");
+            this.smtpServer = config.getString("smtpServer");
+            this.smtpPort = config.getInt("smtpPort");
             JSONArray arr = config.getJSONArray("schedule");
 
             for(int i=0; i<arr.length(); i++) {
@@ -52,12 +87,19 @@ public class Config {
                 ));
             }
 
+            createOutputDirIfNotExists();
         } catch (FileNotFoundException e) {
             System.out.println("Could not find config file");
             //TODO implement config file regeneration in this scenario
         } catch (IOException e) {
             System.out.println("IO Exception while opening config file");
         }
+    }
+
+    private void createOutputDirIfNotExists() {
+        File directory = new File(outputDir);
+        if(!directory.exists())
+            directory.mkdir();
     }
 
     @Override
