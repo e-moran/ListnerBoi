@@ -19,6 +19,7 @@ public class Config {
     private String fromEmail;
     private String emailPass;
     private String smtpServer;
+    private String baseDlUrl;
     private int smtpPort;
 
     public String getStreamURL() {
@@ -57,6 +58,10 @@ public class Config {
         return smtpPort;
     }
 
+    public String getBaseDlUrl() {
+        return baseDlUrl;
+    }
+
     public Config() {
         schedule = new ArrayList<>();
 
@@ -64,13 +69,14 @@ public class Config {
             JSONObject config = new JSONObject(new String(Files.readAllBytes(Paths.get("config.json"))));
 
             this.streamURL = config.getString("streamUrl");
-            this.outputDir = new File(".").getCanonicalPath() + "/" + config.getString("outputDir");
+            this.outputDir = config.getString("outputDir");
             this.isActive = config.getBoolean("active");
             this.ccEmail = config.getString("ccEmail");
             this.fromEmail = config.getString("fromEmail");
             this.emailPass = config.getString("emailPass");
             this.smtpServer = config.getString("smtpServer");
             this.smtpPort = config.getInt("smtpPort");
+            this.baseDlUrl = config.getString("baseDlUrl");
             JSONArray arr = config.getJSONArray("schedule");
 
             for(int i=0; i<arr.length(); i++) {
