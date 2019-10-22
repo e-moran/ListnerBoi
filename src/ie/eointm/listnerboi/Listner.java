@@ -1,27 +1,29 @@
 package ie.eointm.listnerboi;
 
+import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class Listner {
 
-    private Timer timer;
+    //private Timer timer;
     private Config config;
 
     public Listner(Config config) {
-        timer = new Timer();
+        //timer = new Timer();
         this.config = config;
         addTimers();
     }
 
     public void addTimers() {
+        ScheduledExecutorService ses = Executors.newScheduledThreadPool(config.getSchedule().size());
         for(int i=0; i<config.getSchedule().size(); i++) {
             Show s = config.getSchedule().get(i);
-            ListnerThread t = new ListnerThread(this, s, config);
             Calendar d = Calendar.getInstance();
 
             d.set(Calendar.DAY_OF_WEEK, s.getDay());
@@ -31,32 +33,18 @@ public class Listner {
             d.set(Calendar.MILLISECOND, 0);
             d.add(Calendar.MINUTE, -1);
 
-            timer.schedule(new TimedListner(t), d.getTime(), 1000 * 60 * 60 * 24 * 7);
+            ses.scheduleAtFixedRate(new ListnerThread(s, config), (d.getTimeInMillis() - System.currentTimeMillis())/1000, 60*60*24*7, TimeUnit.SECONDS);
             System.out.println("Scheduled timer for "+s.getShowName() + "\nFirst time at " + d.getTimeInMillis());
         }
     }
 
-    class TimedListner extends TimerTask {
-        Thread listner;
-
-        TimedListner (ListnerThread t) {
-            this.listner = t;
-        }
-
-        public void run() {
-            listner.start();
-        }
-    }
-
-    class ListnerThread extends Thread {
-        private Listner listner;
+    class ListnerThread implements Runnable {
         private String outputLocation;
         private String filename;
         private Show s;
         private Config c;
 
-        public ListnerThread(Listner listner, Show s, Config c) {
-            this.listner = listner;
+        public ListnerThread(Show s, Config c) {
             this.s = s;
             this.c = c;
 
@@ -74,20 +62,18 @@ public class Listner {
         private void streamToFile() {
             String[] command = {"ffmpeg", "-t", Integer.toString(s.getRuntime()+120), "-i", c.getStreamURL(), "-acodec", "mp3", "-ab", "257k", outputLocation};
             Process p = null;
-            synchronized (listner) {
-                try {
-                    p = new ProcessBuilder(command).inheritIO().start();
-                    p.waitFor();
+            try {
+                p = new ProcessBuilder(command).redirectInput(new File("/dev/null")).inheritIO().start();
+                p.waitFor();
 
-                    postStream(true);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    postStream(false);
-                } catch (InterruptedException e) {
-                    if(p != null)
-                        p.destroy();
-                    e.printStackTrace();
-                }
+                postStream(true);
+            } catch (IOException e) {
+                e.printStackTrace();
+                postStream(false);
+            } catch (InterruptedException e) {
+                if(p != null)
+                    p.destroy();
+                e.printStackTrace();
             }
         }
 
