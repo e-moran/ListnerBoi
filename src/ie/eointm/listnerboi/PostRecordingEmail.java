@@ -37,7 +37,7 @@ public class PostRecordingEmail {
             m.setRecipients(Message.RecipientType.CC, InternetAddress.parse(c.getCcEmail()));
 
             m.setSubject("Your Internet Radio Recording");
-            m.setText("How's she cutting?,\n\nYour recording is available at "+ c.getBaseDlUrl() + URLEncoder.encode(filename, StandardCharsets.UTF_8).replace("+", "%20") +" for the next little while.\n" +
+            m.setText("How's she cutting?,\n\nYour recording is available at "+ c.getBaseDlUrl() + URLEncoder.encode(filename, StandardCharsets.UTF_8.toString()).replace("+", "%20") +" for the next little while.\n" +
                     "10/10 would recommend downloading it before it disappears forever.\n\n" +
                     "Your friendly neighbourhood robot,\n" +
                     "ListnerBoi"
