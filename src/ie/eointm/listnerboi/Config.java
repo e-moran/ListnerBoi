@@ -82,7 +82,7 @@ public class Config {
             for(int i=0; i<arr.length(); i++) {
                 JSONObject show = arr.getJSONObject(i);
                 schedule.add(new Show(
-                        show.getString("showName"),
+                        show.getString("showName").replace("\"", "").replace("\'", ""), // Don't allow quote marks in show names
                         show.getString("emailAddress"),
                         show.getInt("day"),
                         show.getInt("startTimeHrs"),
