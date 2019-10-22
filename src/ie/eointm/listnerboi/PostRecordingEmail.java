@@ -6,7 +6,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 public class PostRecordingEmail {
-    public PostRecordingEmail(Config c, Show s) {
+    public PostRecordingEmail(Config c, Show s, String filename) {
         Properties p = new Properties();
         p.put("mail.smtp.auth", "true");
         p.put("mail.smtp.starttls.enable", "true");
@@ -16,8 +16,6 @@ public class PostRecordingEmail {
         p.put("mail.smtp.timeout", "5000");
         p.put("mail.smtp.ssl.enable", "true");
         p.put("mail.debug", "true");
-
-        System.out.println(c.getEmailPass());
 
         Session session = Session.getInstance(p,
                 new Authenticator() {
@@ -36,8 +34,12 @@ public class PostRecordingEmail {
             m.setRecipients(Message.RecipientType.TO, InternetAddress.parse(s.getEmailAddress()));
             m.setRecipients(Message.RecipientType.CC, InternetAddress.parse(c.getCcEmail()));
 
-            m.setSubject("TEST");
-            m.setText("TEST");
+            m.setSubject("Your Internet Radio Recording");
+            m.setText("How's she cutting?,\n\nYour recording is available at "+ c.getBaseDlUrl() + filename +" for the next little while.\n" +
+                    "10/10 would recommend downloading it before it disappears forever.\n\n" +
+                    "Your friendly neighbourhood robot,\n" +
+                    "ListnerBoi"
+            );
 
             Transport.send(m);
 
