@@ -1,5 +1,7 @@
 package ie.eointm.listnerboi;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Properties;
@@ -8,29 +10,15 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 public class PostRecordingEmail {
-    public PostRecordingEmail(Config c, Show s, String filename) {
-        Properties p = new Properties();
-        p.put("mail.smtp.auth", "true");
-        p.put("mail.smtp.starttls.enable", "true");
-        p.put("mail.smtp.host", c.getSmtpServer());
-        p.put("mail.smtp.port", Integer.toString(c.getSmtpPort()));
-        p.put("mail.smtp.connectiontimeout", "5000");
-        p.put("mail.smtp.timeout", "5000");
-        p.put("mail.smtp.ssl.enable", "true");
-        p.put("mail.debug", "true");
+    private Config c;
 
-        Session session = Session.getInstance(p,
-                new Authenticator() {
-                    @Override
-                    protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication(c.getFromEmail(), c.getEmailPass());
-                    }
-                }
-        );
+    public PostRecordingEmail(Config c) {
+        this.c = c;
+    }
 
+    public void sendPostRecordingEmail(Show s, String filename) {
         try {
-            System.out.println("Opening new message");
-            MimeMessage m = new MimeMessage(session);
+            MimeMessage m = new MimeMessage(generateSession());
 
             m.setFrom(new InternetAddress(c.getFromEmail()));
             m.setRecipients(Message.RecipientType.TO, InternetAddress.parse(s.getEmailAddress()));
@@ -49,6 +37,56 @@ public class PostRecordingEmail {
         } catch(Exception e) {
             System.out.println("Failed to send confirmation email. \n" + e.getMessage());
         }
+    }
 
+    public void sendFailureEmail(Show s, Exception e) {
+        try {
+            MimeMessage m = new MimeMessage(generateSession());
+
+            m.setFrom(new InternetAddress(c.getFromEmail()));
+            m.setRecipients(Message.RecipientType.TO, InternetAddress.parse(c.getCcEmail()));
+
+            m.setSubject("Show Recording Failed");
+            m.setText("Yo, shit happened and " + s.getShowName() + " wasn't recorded.\n Please use a backup or something like that.\n\n" +
+                    "This is the exception to send to some IT person: " + getFullExceptionString(e) +
+                    "\n\n\nYour least favourite failure of a robot,\n" +
+                    "ListnerBoi"
+            );
+
+            Transport.send(m);
+
+            System.out.println("Error email sent");
+        } catch(Exception ex) {
+            System.out.println("Failed to send error email. \n" + ex.getMessage());
+        }
+    }
+
+    private Session generateSession() {
+        Properties p = new Properties();
+        p.put("mail.smtp.auth", "true");
+        p.put("mail.smtp.starttls.enable", "true");
+        p.put("mail.smtp.host", c.getSmtpServer());
+        p.put("mail.smtp.port", Integer.toString(c.getSmtpPort()));
+        p.put("mail.smtp.connectiontimeout", "10000");
+        p.put("mail.smtp.timeout", "10000");
+        p.put("mail.smtp.ssl.enable", "true");
+        p.put("mail.debug", "true");
+
+        return Session.getInstance(p,
+                new Authenticator() {
+                    @Override
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(c.getFromEmail(), c.getEmailPass());
+                    }
+                }
+        );
+    }
+
+    private String getFullExceptionString(Exception e) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        PrintStream ps = new PrintStream(baos);
+        e.printStackTrace(ps);
+        ps.close();
+        return baos.toString();
     }
 }

@@ -66,7 +66,12 @@ public class Listner {
                 p = new ProcessBuilder(command).redirectInput(new File("/dev/null")).inheritIO().start();
                 p.waitFor();
 
-                postStream(true);
+                File f = new File(outputLocation);
+                if(f.isFile()) {
+                    postStream(true);
+                } else {
+                    postStream(false);
+                }
             } catch (IOException e) {
                 e.printStackTrace();
                 postStream(false);
@@ -78,9 +83,13 @@ public class Listner {
         }
 
         private void postStream(boolean succeeded) {
-            System.out.println(getTimestamp() + "Stream successfully recorded to location " + outputLocation);
-
-            new PostRecordingEmail(c, s, filename);
+            if(succeeded) {
+                System.out.println(getTimestamp() + "Stream successfully recorded to location " + outputLocation);
+                new PostRecordingEmail(c).sendPostRecordingEmail(s, filename);
+            } else {
+                System.out.println(getTimestamp() + "Stream" + s.getShowName() + " failed to record.");
+                new PostRecordingEmail(c).sendFailureEmail(s, new Exception("File was not found post-recording"));
+            }
         }
 
         private String getTimestamp() {
