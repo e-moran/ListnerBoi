@@ -33,6 +33,10 @@ public class Listner {
             d.set(Calendar.MILLISECOND, 0);
             d.add(Calendar.MINUTE, -1);
 
+            // Code to ensure correct scheduling if the scheduled time has already been missed this week
+            if(d.getTimeInMillis() - System.currentTimeMillis() < 0)
+                d.add(Calendar.DATE, 7);
+
             ses.scheduleAtFixedRate(new ListnerThread(s, config), (d.getTimeInMillis() - System.currentTimeMillis())/1000, 60*60*24*7, TimeUnit.SECONDS);
             System.out.println("Scheduled timer for "+s.getShowName() + "\nFirst time at " + d.getTimeInMillis());
         }

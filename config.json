@@ -1,23 +1,29 @@
 {
-  "streamUrl": "http://sampleradio.com/",
-  "outputDir": "output",
+  "streamUrl": "https://live.heanet.ie/73b725db6e62550832232116ac7202e8/ngrp:720p_all/playlist.m3u8",
+  "outputDir": "/home/eointm/Documents/ir_dump",
   "active": false,
+  "ccEmail": "eoin.t.moran00@gmail.com",
+  "fromEmail": "listnerboi.noreply@eointm.com",
+  "emailPass": "q10022080Q",
+  "smtpServer": "smtp.zoho.com",
+  "smtpPort": 465,
+  "baseDlUrl": "http://listnerboi.eointm.com/",
   "schedule": [
     {
-      "showName": "Judgement",
-      "emailAddress": "test@test.com",
+      "showName": "TheAgency  '\"",
+      "emailAddress": "eoin.t.moran@gmail.com",
       "day": 4,
-      "startTimeHrs": 12,
-      "startTimeMins": 0,
+      "startTimeHrs": 15,
+      "startTimeMins": 1,
       "startTimeSecs": 0,
-      "runtime": 3600
+      "runtime": 0
     },
     {
       "showName": "A Slightly Worse Show Than Judgement",
       "emailAddress": "test2@test.com",
-      "day": 3,
-      "startTimeHrs": 11,
-      "startTimeMins": 0,
+      "day": 2,
+      "startTimeHrs": 23,
+      "startTimeMins": 33,
       "startTimeSecs": 0,
       "runtime": 3600
     }
