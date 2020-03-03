@@ -1,19 +1,20 @@
 package ie.eointm.listnerboi;
 
+import java.util.Arrays;
 import java.util.Calendar;
 
 public class Show {
     private String showName;
-    private String emailAddress;
+    private String[] emailAddresses;
     private int day;
     private int startHr;
     private int startMin;
     private int startSec;
     private int runtime; // In seconds
 
-    public Show(String showName, String emailAddress, int day, int startHr, int startMin, int startSec, int runtime) {
+    public Show(String showName, String[] emailAddresses, int day, int startHr, int startMin, int startSec, int runtime) {
         this.showName = showName;
-        this.emailAddress = emailAddress;
+        this.emailAddresses = emailAddresses;
         this.day = convertDay(day);
         this.startHr = startHr;
         this.startMin = startMin;
@@ -25,8 +26,8 @@ public class Show {
         return showName;
     }
 
-    public String getEmailAddress() {
-        return emailAddress;
+    public String[] getEmailAddress() {
+        return emailAddresses;
     }
 
     public int getDay() {
@@ -53,7 +54,7 @@ public class Show {
     public String toString() {
         return "Show{" +
                 "showName='" + showName + '\'' +
-                ", emailAddress='" + emailAddress + '\'' +
+                ", emailAddresses='" + Arrays.toString(emailAddresses) + '\'' +
                 ", day=" + day +
                 ", startHr=" + startHr +
                 ", startMin=" + startMin +

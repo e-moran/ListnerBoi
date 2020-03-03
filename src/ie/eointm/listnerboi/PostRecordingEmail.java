@@ -21,11 +21,12 @@ public class PostRecordingEmail {
             MimeMessage m = new MimeMessage(generateSession());
 
             m.setFrom(new InternetAddress(c.getFromEmail()));
-            m.setRecipients(Message.RecipientType.TO, InternetAddress.parse(s.getEmailAddress()));
+            for (int i=0; i<s.getEmailAddress().length; i++)
+                m.setRecipients(Message.RecipientType.TO, InternetAddress.parse(s.getEmailAddress()[i]));
             m.setRecipients(Message.RecipientType.CC, InternetAddress.parse(c.getCcEmail()));
 
             m.setSubject("Your Internet Radio Recording");
-            m.setText("How's she cutting?,\n\nYour recording is available at "+ c.getBaseDlUrl() + URLEncoder.encode(filename, StandardCharsets.UTF_8.toString()).replace("+", "%20") +" for the next little while.\n" +
+            m.setText("Your recording is available at "+ c.getBaseDlUrl() + URLEncoder.encode(filename, StandardCharsets.UTF_8.toString()).replace("+", "%20") +" for the next little while.\n" +
                     "10/10 would recommend downloading it before it disappears forever.\n\n" +
                     "Your friendly neighbourhood robot,\n" +
                     "ListnerBoi"

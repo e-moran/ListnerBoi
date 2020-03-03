@@ -81,9 +81,11 @@ public class Config {
 
             for(int i=0; i<arr.length(); i++) {
                 JSONObject show = arr.getJSONObject(i);
+                String emailsString = show.getString("emailAddress").replace(" ", "");
+                String[] emails = emailsString.split(",");
                 schedule.add(new Show(
-                        show.getString("showName").replace("\"", "").replace("\'", ""), // Don't allow quote marks in show names
-                        show.getString("emailAddress"),
+                        show.getString("showName").replace("\"", "").replace("'", ""), // Don't allow quote marks in show names
+                        emails,
                         show.getInt("day"),
                         show.getInt("startTimeHrs"),
                         show.getInt("startTimeMins"),
@@ -110,10 +112,10 @@ public class Config {
 
     @Override
     public String toString() {
-        String scheduleInfo = "";
+        StringBuilder sb = new StringBuilder();
         for(int i=0; i<schedule.size(); i++)
-            scheduleInfo += "    " + schedule.get(i).toString() + '\n';
+            sb.append("    ").append(schedule.get(i).toString()).append('\n');
 
-        return "URL: " + getStreamURL() + "\noutputDir: " + outputDir  + "\nisActive: " + (isActive ? "true" : "false") + "\nSchedule:\n" + scheduleInfo;
+        return "URL: " + getStreamURL() + "\noutputDir: " + outputDir  + "\nisActive: " + (isActive ? "true" : "false") + "\nSchedule:\n" + sb.toString();
     }
 }
