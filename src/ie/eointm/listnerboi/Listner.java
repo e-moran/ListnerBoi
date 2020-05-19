@@ -26,12 +26,16 @@ public class Listner {
             Show s = config.getSchedule().get(i);
             Calendar d = Calendar.getInstance();
 
-            d.set(Calendar.DAY_OF_WEEK, s.getDay());
-            d.set(Calendar.HOUR_OF_DAY, s.getStartHr());
-            d.set(Calendar.MINUTE, s.getStartMin());
-            d.set(Calendar.SECOND, s.getStartSec());
-            d.set(Calendar.MILLISECOND, 0);
-            d.add(Calendar.MINUTE, -1);
+            if (s.getDay() == -1) { // To allow for easier debugging
+                d.add(Calendar.SECOND, 3);
+            } else {
+                d.set(Calendar.DAY_OF_WEEK, s.getDay());
+                d.set(Calendar.HOUR_OF_DAY, s.getStartHr());
+                d.set(Calendar.MINUTE, s.getStartMin());
+                d.set(Calendar.SECOND, s.getStartSec());
+                d.set(Calendar.MILLISECOND, 0);
+                d.add(Calendar.MINUTE, -1);
+            }
 
             // Code to ensure correct scheduling if the scheduled time has already been missed this week
             if(d.getTimeInMillis() - System.currentTimeMillis() < 0)
@@ -71,17 +75,12 @@ public class Listner {
                 p.waitFor();
 
                 File f = new File(outputLocation);
-                if(f.isFile()) {
-                    postStream(true);
-                } else {
-                    postStream(false);
-                }
+                postStream(f.isFile());
             } catch (IOException e) {
                 e.printStackTrace();
                 postStream(false);
             } catch (InterruptedException e) {
-                if(p != null)
-                    p.destroy();
+                p.destroy();
                 e.printStackTrace();
             }
         }

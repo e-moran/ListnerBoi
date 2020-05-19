@@ -65,6 +65,8 @@ public class Show {
 
     public static int convertDay(int day) {
         switch(day) {
+            case -1: // To leave the debug -1 signal intact
+                return -1;
             case 1:
                 return Calendar.MONDAY;
             case 2:
