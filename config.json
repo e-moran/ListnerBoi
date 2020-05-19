@@ -1,6 +1,6 @@
 {
-  "streamUrl": "https://live.heanet.ie/73b725db6e62550832232116ac7202e8/ngrp:720p_all/playlist.m3u8",
-  "outputDir": "/home/eointm/Documents/ir_dump",
+  "streamUrl": "http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_low/ak/bbc_world_service.m3u8",
+  "outputDir": "/home/eoin/Documents/ListnerBoiOutput",
   "active": false,
   "ccEmail": "eoin.t.moran00@gmail.com",
   "fromEmail": "listnerboi.noreply@eointm.com",
@@ -12,7 +12,7 @@
     {
       "showName": "TheAgency  '\"",
       "emailAddress": "eoin.t.moran@gmail.com",
-      "day": 4,
+      "day": -1,
       "startTimeHrs": 15,
       "startTimeMins": 1,
       "startTimeSecs": 0,

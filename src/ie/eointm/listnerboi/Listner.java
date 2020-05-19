@@ -71,11 +71,12 @@ public class Listner {
             String[] command = {"ffmpeg", "-t", Integer.toString(s.getRuntime()+120), "-i", c.getStreamURL(), "-acodec", "mp3", "-ab", "257k", outputLocation};
             Process p = null;
             try {
+                RecordingMonitor monitor = new RecordingMonitor(outputLocation);
+                new Thread(monitor).start();
                 p = new ProcessBuilder(command).redirectInput(new File("/dev/null")).inheritIO().start();
                 p.waitFor();
 
-                File f = new File(outputLocation);
-                postStream(f.isFile());
+                postStream(monitor.getStatus());
             } catch (IOException e) {
                 e.printStackTrace();
                 postStream(false);
